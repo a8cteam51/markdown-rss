@@ -21,7 +21,7 @@ jobs:
       - name: Prepare Release Directory
         run: |
           mkdir ${{ github.event.repository.name }}
-          cp -r markdown-rss.php index.php readme.txt LICENSE languages vendor ${{ github.event.repository.name }}/
+          cp -r markdown-rss.php index.php readme.txt LICENSE languages vendor composer.json composer.lock ${{ github.event.repository.name }}/
 
       - name: Zip Release
         run: zip -r ${{ github.event.repository.name }}.zip ./${{ github.event.repository.name }}

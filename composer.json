@@ -1,7 +1,6 @@
 {
   "name": "a8cteam51/markdown-rss",
   "type": "wordpress-plugin",
-  "version": "1.0.0",
   "description": "Adds the element <source:markdown> to the RSS feed.",
   "homepage": "https://github.com/a8cteam51/markdown-rss",
   "license": "GPL-3.0-or-later",
@@ -46,6 +45,22 @@
     "packages-update": [
       "@composer clear-cache",
       "@composer update --prefer-stable --no-interaction"
+    ],
+    "build": [
+      "@composer validate --strict",
+      "@build:prepare",
+      "@build:zip",
+      "@build:cleanup"
+    ],
+    "build:prepare": [
+      "@composer install --no-dev --ignore-platform-reqs --no-interaction --optimize-autoloader",
+      "rm -rf ./build && mkdir -p ./build/markdown-rss",
+      "cp -r markdown-rss.php index.php readme.txt LICENSE languages vendor composer.json composer.lock ./build/markdown-rss/"
+    ],
+    "build:zip": "cd ./build && zip -r markdown-rss.zip ./markdown-rss && mv markdown-rss.zip ../",
+    "build:cleanup": [
+      "rm -rf ./build",
+      "@composer install --ignore-platform-reqs --no-interaction"
     ]
   },
   "config": {
