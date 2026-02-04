@@ -52,7 +52,7 @@ add_action( 'rss2_item', 'markdown_rss_add_source_markdown_element' );
  */
 function markdown_rss_add_source_markdown_element() {
 	$content   = get_the_content_feed();
-	$converter = new League\HtmlToMarkdown\HtmlConverter( array( 'strip_tags' => true ) );
+	$converter = new League\HTMLToMarkdown\HtmlConverter( array( 'strip_tags' => true ) );
 
 	printf( '<source:markdown><![CDATA[%s]]></source:markdown>', $converter->convert( $content ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
