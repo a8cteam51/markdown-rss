@@ -1,0 +1,32 @@
+name: Build and Release
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer run-script packages-install -- --no-dev
+
+      - name: Prepare Release Directory
+        run: |
+          mkdir ${{ github.event.repository.name }}
+          cp -r markdown-rss.php index.php readme.txt LICENSE languages vendor ${{ github.event.repository.name }}/
+
+      - name: Zip Release
+        run: zip -r ${{ github.event.repository.name }}.zip ./${{ github.event.repository.name }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.event.repository.name }}.zip
