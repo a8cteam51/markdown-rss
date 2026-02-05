@@ -41,8 +41,6 @@ if ( ! is_file( __DIR__ . '/vendor/autoload.php' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-add_action( 'rss2_item', 'markdown_rss_add_source_markdown_element' );
-
 /**
  * Adds the <source:markdown> element to the RSS feed.
  *
@@ -51,8 +49,36 @@ add_action( 'rss2_item', 'markdown_rss_add_source_markdown_element' );
  * @return void
  */
 function markdown_rss_add_source_markdown_element() {
-	$content   = get_the_content_feed();
+	$post = get_post();
+
+	if ( ! $post ) {
+		return;
+	}
+
+	if ( ! empty( $post->post_content ) ) {
+		$content = apply_filters( 'the_content', $post->post_content ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+	} else {
+		return;
+	}
+
+	$content   = str_replace( ']]>', ']]&gt;', $content );
 	$converter = new League\HTMLToMarkdown\HtmlConverter( array( 'strip_tags' => true ) );
 
-	printf( '<source:markdown><![CDATA[%s]]></source:markdown>', $converter->convert( $content ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is wrapped in CDATA with ]]> escaped.
+	echo "\t\t<source:markdown><![CDATA[" . $converter->convert( $content ) . "]]></source:markdown>\n";
 }
+
+add_action( 'rss2_item', 'markdown_rss_add_source_markdown_element' );
+
+/**
+ * Adds the source namespace to the RSS feed.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function markdown_rss_namespace() {
+	echo 'xmlns:source="https://source.scripting.com/"';
+}
+
+add_action( 'rss2_ns', 'markdown_rss_namespace' );
