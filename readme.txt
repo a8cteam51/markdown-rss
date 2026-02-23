@@ -1,5 +1,5 @@
 === Markdown RSS ===
-Contributors: wpspecialprojects, fmfernandes
+Contributors: wpspecialprojects, cagrimmett, fmfernandes
 Tags: rss
 Requires at least: 6.2
 Tested up to: 6.9

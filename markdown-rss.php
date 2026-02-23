@@ -11,7 +11,6 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Markdown RSS
- * Plugin URI:        https://specialprojects.automattic.com/
  * Description:       Adds the element source:markdown to the RSS feed.
  * Version:           1.0.0
  * Requires at least: 6.2
